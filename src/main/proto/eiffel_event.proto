@@ -1,0 +1,57 @@
+syntax = "proto3";
+
+import "eiffel_source_change_created_event.proto";
+
+package net.praqma.tracey.protocol.eiffel;
+
+message EiffelEvent {
+  Meta meta = 1;
+  repeated Link links = 2;
+  oneof data {
+    EiffelSourceChangeCreatedEvent eiffelSourceChangeCreatedEventData = 100;
+  }
+
+  message Meta {
+    enum EventType {
+      EiffelSourceChangeCreatedEvent = 0;
+    }
+    string    id = 1;
+    string    domainId = 2;
+    EventType type = 3;
+    string    version = 4;
+    int64     time = 5;
+    repeated string    tags = 6;
+    Source    source = 7;
+
+    message Source {
+      string host = 1;
+      string name = 2;
+      string uri = 3;
+      Serializer serializer = 4;
+
+      message Serializer {
+        string groupId = 1;
+        string artifact = 2;
+        string version = 3;
+      }
+    }
+  }
+
+  message Link {
+    enum LinkType {
+      CAUSE = 0;
+      PREVIOUS_VERSION = 1;
+      // The rest of the link types will be added if needed
+    }
+    LinkType type = 1;
+    string   id   = 2;
+  }
+}
+
+
+
+
+
+
+
+
