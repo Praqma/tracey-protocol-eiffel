@@ -5,6 +5,7 @@ package net.praqma.tracey.protocol.eiffel;
 message EiffelSourceChangeCreatedEvent {
     Author author = 1;
     repeated Issue issues = 2;
+    Change change = 3;
     oneof identifier {
         GitIdentifier gitIdentifier = 100;
     }
@@ -14,6 +15,12 @@ message EiffelSourceChangeCreatedEvent {
         string email = 2;
         string id = 3;
         string organisation = 4;
+    }
+
+    message Change {
+        int32 insertions = 1;
+        int32 deletions = 2;
+        repeated string files = 3;
     }
 
     message Issue {
