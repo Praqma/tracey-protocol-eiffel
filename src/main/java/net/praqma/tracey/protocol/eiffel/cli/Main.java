@@ -1,5 +1,8 @@
 package net.praqma.tracey.protocol.eiffel.cli;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
 import net.praqma.tracey.protocol.eiffel.EiffelEventFactory;
 import net.praqma.tracey.protocol.eiffel.EiffelEventOuterClass.*;
 import net.praqma.tracey.protocol.eiffel.EiffelSourceChangeCreatedEventFactory;
@@ -7,6 +10,8 @@ import net.praqma.tracey.protocol.eiffel.EiffelSourceChangeCreatedEventOuterClas
 import net.praqma.tracey.protocol.eiffel.MetaFactory;
 
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -27,6 +32,16 @@ public class Main {
         final EiffelSourceChangeCreatedEvent data = EiffelSourceChangeCreatedEventFactory.createFromGit(Paths.get(".").toAbsolutePath().normalize().toString(),
                 "HEAD", "master");
         final EiffelEvent event = EiffelEventFactory.create(meta, data, links);
+        System.out.println(event);
+        File f = new File("example.json");
+        if(f.exists()) {
+            f.delete();
+        }
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("example.json"), "utf-8"))) {
+            writer.write(event.toString());
+        }
+
+
         log.info("\n" + event.toString());
     }
 }
