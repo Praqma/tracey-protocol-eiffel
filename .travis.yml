@@ -7,4 +7,4 @@ cache:
   - $HOME/.gradle
 
 script:
-  - ./gradlew build
+  - ./gradlew clean standAloneJar

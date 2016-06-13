@@ -1,6 +1,8 @@
 apply plugin: 'java'
-apply plugin: "com.google.protobuf"
 apply plugin: 'maven-publish'
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'gradle-one-jar'
 
 buildscript {
     repositories {
@@ -8,9 +10,9 @@ buildscript {
     }
     dependencies {
         classpath 'com.google.protobuf:protobuf-gradle-plugin:0.7.0'
+        classpath 'com.github.rholder:gradle-one-jar:1.0.4'
     }
 }
-
 repositories {
     mavenLocal()
     mavenCentral()
@@ -18,8 +20,19 @@ repositories {
 
 dependencies {
     compile 'com.google.protobuf:protobuf-java:3.0.0-beta-1'
+    compile 'org.eclipse.jgit:org.eclipse.jgit:4.2.0.201601211800-r'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'net.praqma.tracey.protocol.eiffel.cli.Main'
+    }
+}
+
+task standAloneJar(type: OneJar) {
+    mainClass = 'net.praqma.tracey.protocol.eiffel.cli.Main'
+    useStable = false
+}
 
 sourceSets {
     main {
