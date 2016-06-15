@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
+import com.google.protobuf.util.JsonFormat;
 
 public class Main {
     private static final Logger log = Logger.getLogger( Main.class.getName() );
@@ -34,14 +35,13 @@ public class Main {
         final EiffelEvent event = EiffelEventFactory.create(meta, data, links);
         System.out.println(event);
         File f = new File("example.json");
+
         if(f.exists()) {
             f.delete();
         }
+        
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("example.json"), "utf-8"))) {
-            writer.write(event.toString());
+            writer.write(JsonFormat.printer().print(event));
         }
-
-
-        log.info("\n" + event.toString());
     }
 }

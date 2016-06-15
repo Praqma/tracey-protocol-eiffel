@@ -1,6 +1,5 @@
 package net.praqma.tracey.protocol.eiffel;
 
-import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 import net.praqma.tracey.protocol.eiffel.EiffelEventOuterClass.*;
