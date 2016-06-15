@@ -26,16 +26,16 @@ public class EiffelSourceChangeCreatedEventFactory {
     private static final Logger log = Logger.getLogger( EiffelSourceChangeCreatedEventFactory.class.getName() );
 
     private static Repository openRepository(final String path) throws IOException {
-        log.info("Attempting to read repo: " + path);
+        log.fine("Attempting to read repo: " + path);
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
         final Repository repository = builder.findGitDir(new File(path)).build();
-        log.info("Read repository: " + repository.getDirectory());
+        log.fine("Read repository: " + repository.getDirectory());
         return repository;
     }
 
     private static RevCommit getCommitById(final Repository repository, final String commitId) throws IOException {
         final ObjectId commitObj = repository.resolve(commitId);
-        log.info("Found commit: " + commitObj.getName());
+        log.fine("Found commit: " + commitObj.getName());
         final RevWalk walk = new RevWalk(repository);
         final RevCommit commit = walk.parseCommit(commitObj);
         walk.dispose();
@@ -93,7 +93,7 @@ public class EiffelSourceChangeCreatedEventFactory {
                     case EMPTY:
                         break;
                 }
-                log.info("Calculated stat for change " + edit.toString() + ", insertions " + stat.insertions + ", deletions " + stat.deletetions);
+                log.fine("Calculated stat for change " + edit.toString() + ", insertions " + stat.insertions + ", deletions " + stat.deletetions);
             }
         }
         return stat;
@@ -107,7 +107,7 @@ public class EiffelSourceChangeCreatedEventFactory {
             // We commit.getParent(0) will return incomplete RevCommit that does not contain tree
             // That's why we should resolve parent using getCommitById. Yes, I it is silly but this is how it is
             RevCommit parent = getCommitById(repository, commit.getParent(0).getName());
-            log.info("Get change info - compare " + commit.getName() + " and " + parent.getName());
+            log.fine("Get change info - compare " + commit.getName() + " and " + parent.getName());
             DiffFormatter df = new DiffFormatter(DisabledOutputStream.INSTANCE);
             df.setRepository(repository);
             //df.setDiffComparator(RawTextComparator.DEFAULT);
@@ -120,7 +120,7 @@ public class EiffelSourceChangeCreatedEventFactory {
                 PatchStat stat = parseChangeStats(df, diff);
                 finalStat.insertions += stat.insertions;
                 finalStat.deletetions += stat.deletetions;
-                log.info(fileChange + ", inserted lines: " + stat.insertions + ", deleted lines: " + stat.deletetions);
+                log.fine(fileChange + ", inserted lines: " + stat.insertions + ", deleted lines: " + stat.deletetions);
             }
         } else {
             // This means it is either a shallow clone or first commit in the tree

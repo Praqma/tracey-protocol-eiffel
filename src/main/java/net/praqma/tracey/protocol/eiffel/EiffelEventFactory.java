@@ -17,11 +17,11 @@ public class EiffelEventFactory {
         event.addAllLinks(links);
         // Determine data type provided and call correct method to set it
         final String dataClassName = meta.getType().name();
-        log.info("Provided data type: " + dataClassName);
+        log.fine("Provided data type: " + dataClassName);
         // TODO: Based on naming convention - it should be a better way
         final String dataClassFullName = "net.praqma.tracey.protocol.eiffel." + dataClassName + "OuterClass$" + dataClassName;
         final Class<?> dataClass = Class.forName(dataClassFullName);
-        log.info("Provided data type: " + dataClass.getCanonicalName());
+        log.fine("Provided data type: " + dataClass.getCanonicalName());
         final Method setDataMethod = event.getClass().getMethod("set" + dataClassName, dataClass);
         setDataMethod.invoke(event, dataClass.cast(data));
         return event.build();
