@@ -3,11 +3,11 @@ package net.praqma.tracey.protocol.eiffel.cli;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import net.praqma.tracey.protocol.eiffel.EiffelEventFactory;
-import net.praqma.tracey.protocol.eiffel.EiffelEventOuterClass.*;
-import net.praqma.tracey.protocol.eiffel.EiffelSourceChangeCreatedEventFactory;
-import net.praqma.tracey.protocol.eiffel.EiffelSourceChangeCreatedEventOuterClass.*;
-import net.praqma.tracey.protocol.eiffel.MetaFactory;
+
+import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent;
+import net.praqma.tracey.protocol.eiffel.factories.EiffelSourceChangeCreatedEventFactory;
+import net.praqma.tracey.protocol.eiffel.models.Models.Link;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.Serializer;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -17,9 +17,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Handler;
 import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 import com.google.protobuf.util.JsonFormat;
 import net.sourceforge.argparse4j.ArgumentParsers;
@@ -51,15 +49,16 @@ public class Main {
             rootLog.getHandlers()[0].setLevel( Level.FINE );
         }
 
-        EiffelEvent.Meta.Source.Serializer gav = MetaFactory.getSerializer("whatever", "1.0.0", "com.whatever");
-        EiffelEvent.Meta.Source source = MetaFactory.getSource("hots", "name", "uri", gav);
-        EiffelEvent.Meta meta = MetaFactory.create("domainId", EiffelEvent.Meta.EventType.EiffelSourceChangeCreatedEvent, source);
-        final List<EiffelEvent.Link> links = new ArrayList<>();
-        links.add(EiffelEvent.Link.newBuilder().setType(EiffelEvent.Link.LinkType.PREVIOUS_VERSION).setId(UUID.randomUUID().toString()).build());
-        links.add(EiffelEvent.Link.newBuilder().setType(EiffelEvent.Link.LinkType.CAUSE).setId(UUID.randomUUID().toString()).build());
-        final EiffelSourceChangeCreatedEvent data = EiffelSourceChangeCreatedEventFactory.createFromGit(Paths.get(".").toAbsolutePath().normalize().toString(),
-                "HEAD", "master");
-        final EiffelEvent event = EiffelEventFactory.create(meta, data, links);
+
+        Serializer gav = Serializer.newBuilder().setArtifactId("id").setGroupId("group").setVersion("1.0.0").build();
+        final EiffelSourceChangeCreatedEventFactory factory = new EiffelSourceChangeCreatedEventFactory("host", "name", "uri", "domainId", gav);
+
+        final List<Link> links = new ArrayList<>();
+        links.add(Link.newBuilder().setType(Link.LinkType.PREVIOUS_VERSION).setId(UUID.randomUUID().toString()).build());
+        links.add(Link.newBuilder().setType(Link.LinkType.CAUSE).setId(UUID.randomUUID().toString()).build());
+        factory.parseFromGit(Paths.get(".").toAbsolutePath().normalize().toString(), "HEAD", "master");
+        final EiffelSourceChangeCreatedEvent.Builder event = (EiffelSourceChangeCreatedEvent.Builder) factory.create();
+        event.addAllLinks(links);
 
         if (ns.getString("file") != null) {
             File f = new File("example.json");

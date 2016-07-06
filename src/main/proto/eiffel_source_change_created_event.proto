@@ -1,13 +1,21 @@
 syntax = "proto3";
 
-package net.praqma.tracey.protocol.eiffel;
+package net.praqma.tracey.protocol.eiffel.events;
+
+import "models.proto";
 
 message EiffelSourceChangeCreatedEvent {
-    Author author = 1;
-    repeated Issue issues = 2;
-    Change change = 3;
-    oneof identifier {
-        GitIdentifier gitIdentifier = 100;
+    models.Meta meta = 1;
+    repeated models.Link links = 2;
+    EiffelSourceChangeCreatedEventData data = 3;
+
+    message EiffelSourceChangeCreatedEventData {
+        Author author = 1;
+        repeated Issue issues = 2;
+        Change change = 3;
+        oneof identifier {
+            models.Data.GitIdentifier gitIdentifier = 100;
+        }
     }
 
     message Author {
@@ -33,13 +41,6 @@ message EiffelSourceChangeCreatedEvent {
         Transition transition = 2;
         string uri = 3;
         string trackerType = 4;
-    }
-
-    message GitIdentifier {
-        string commitId = 1;
-        string branch = 2;
-        string repoName = 3;
-        string repoUri = 4;
     }
 }
 

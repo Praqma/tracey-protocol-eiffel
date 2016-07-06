@@ -5,7 +5,7 @@ build/
 *.ipr
 *.iws
 *~
-EiffelEventOuterClass.java
-EiffelSourceChangeCreatedEventOuterClass.java
+src/main/java/net/praqma/tracey/protocol/eiffel/events
+src/main/java/net/praqma/tracey/protocol/eiffel/models
 /.nb-gradle/
 *.json

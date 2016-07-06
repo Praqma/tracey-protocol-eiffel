@@ -1,17 +1,15 @@
-package net.praqma.tracey.protocol.eiffel;
+package net.praqma.tracey.protocol.eiffel.utils;
 
-import net.praqma.tracey.protocol.eiffel.EiffelSourceChangeCreatedEventOuterClass.*;
-
-import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.logging.Logger;
-
+import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Author;
+import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Change;
+import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Issue;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.GitIdentifier;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
-import org.eclipse.jgit.lib.*;
+import org.eclipse.jgit.lib.Config;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -21,11 +19,16 @@ import org.eclipse.jgit.util.io.DisabledOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.logging.Logger;
 
-public class EiffelSourceChangeCreatedEventFactory {
-    private static final Logger log = Logger.getLogger( EiffelSourceChangeCreatedEventFactory.class.getName() );
+public class GitUtils {
+    private static final Logger log = Logger.getLogger( GitUtils.class.getName() );
 
-    private static Repository openRepository(final String path) throws IOException {
+    public static Repository openRepository(final String path) throws IOException {
         log.fine("Attempting to read repo: " + path);
         final FileRepositoryBuilder builder = new FileRepositoryBuilder();
         final Repository repository = builder.findGitDir(new File(path)).build();
@@ -33,7 +36,7 @@ public class EiffelSourceChangeCreatedEventFactory {
         return repository;
     }
 
-    private static RevCommit getCommitById(final Repository repository, final String commitId) throws IOException {
+    public static RevCommit getCommitById(final Repository repository, final String commitId) throws IOException {
         final ObjectId commitObj = repository.resolve(commitId);
         log.fine("Found commit: " + commitObj.getName());
         final RevWalk walk = new RevWalk(repository);
@@ -63,8 +66,6 @@ public class EiffelSourceChangeCreatedEventFactory {
     private static class PatchStat {
         public int insertions = 0;
         public int deletetions = 0;
-
-        PatchStat() {};
     }
 
     private static PatchStat parseChangeStats(DiffFormatter df, DiffEntry entry) throws IOException {
@@ -72,7 +73,7 @@ public class EiffelSourceChangeCreatedEventFactory {
         FileHeader fileHeader = df.toFileHeader(entry);
         List<? extends HunkHeader> hunks = fileHeader.getHunks();
         for (HunkHeader hunk : hunks) {
-            for (Edit edit: hunk.toEditList()) {
+            for (Edit edit : hunk.toEditList()) {
                 switch (edit.getType()) {
                     // An edit where beginA < endA && beginB == endB is a delete edit,
                     // that is sequence B has removed the elements between [beginA, endA).
@@ -99,8 +100,8 @@ public class EiffelSourceChangeCreatedEventFactory {
         return stat;
     }
 
-    private static EiffelSourceChangeCreatedEvent.Change getChange(final Repository repository, final RevCommit commit) throws IOException {
-        final EiffelSourceChangeCreatedEvent.Change.Builder change = EiffelSourceChangeCreatedEvent.Change.newBuilder();
+    public static Change getChange(final Repository repository, final RevCommit commit) throws IOException {
+        final Change.Builder change = Change.newBuilder();
         PatchStat finalStat = new PatchStat();
         String fileChange = "";
         if ( commit.getParentCount() > 0 ) {
@@ -124,17 +125,19 @@ public class EiffelSourceChangeCreatedEventFactory {
             }
         } else {
             // This means it is either a shallow clone or first commit in the tree
-                log.warning("No parents found - can't get a diff");
+            log.warning("No parents found - can't get a diff");
         }
         change.setDeletions(finalStat.deletetions);
         change.setInsertions(finalStat.insertions);
         return change.build();
     }
 
-    private static EiffelSourceChangeCreatedEvent.GitIdentifier getGitId(final Repository repository, final String commitId, final String branch) throws MalformedURLException {
-        final EiffelSourceChangeCreatedEvent.GitIdentifier.Builder gitId = EiffelSourceChangeCreatedEvent.GitIdentifier.newBuilder();
+    public static GitIdentifier getGitId(final Repository repository, final String commitId, final String branch) throws
+            IOException {
+        final GitIdentifier.Builder gitId = GitIdentifier.newBuilder();
         gitId.setBranch(branch);
-        gitId.setCommitId(commitId);
+        // make sure to resolve commitId in case if we got a ref like HEAD or branch name
+        gitId.setCommitId(getCommitById(repository, commitId).getName());
         final Config storedConfig = repository.getConfig();
         // Pick first remote
         final Set<String> remotes = storedConfig.getSubsections("remote");
@@ -149,8 +152,8 @@ public class EiffelSourceChangeCreatedEventFactory {
         return gitId.build();
     }
 
-    private static EiffelSourceChangeCreatedEvent.Author getAuthor(final RevCommit commit) {
-        final EiffelSourceChangeCreatedEvent.Author.Builder author = EiffelSourceChangeCreatedEvent.Author.newBuilder();
+    public static Author getAuthor(final RevCommit commit) {
+        final Author.Builder author = Author.newBuilder();
         author.setEmail(commit.getAuthorIdent().getEmailAddress());
         author.setName(commit.getAuthorIdent().getName());
         // TODO: Have no idea where to get organisation and id
@@ -158,19 +161,8 @@ public class EiffelSourceChangeCreatedEventFactory {
     }
 
     // TODO: parse issues from the commit message
-    private static List<EiffelSourceChangeCreatedEvent.Issue> getIssues(final RevCommit commit) {
-        List<EiffelSourceChangeCreatedEvent.Issue> issues = new ArrayList<>();
+    public static List<Issue> getIssues(final RevCommit commit) {
+        List<Issue> issues = new ArrayList<>();
         return issues;
-    }
-
-    public static EiffelSourceChangeCreatedEvent createFromGit(final String path, final String commitId, final String branch) throws IOException {
-        final EiffelSourceChangeCreatedEvent.Builder eventData = EiffelSourceChangeCreatedEvent.newBuilder();
-        final Repository repository = openRepository(path);
-        final RevCommit commit = getCommitById(repository, commitId);
-        eventData.setGitIdentifier(getGitId(repository, commitId, branch));
-        eventData.setAuthor(getAuthor(commit));
-        eventData.addAllIssues(getIssues(commit));
-        eventData.setChange(getChange(repository, commit));
-        return eventData.build();
     }
 }
