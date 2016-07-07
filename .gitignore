@@ -9,3 +9,5 @@ src/main/java/net/praqma/tracey/protocol/eiffel/events
 src/main/java/net/praqma/tracey/protocol/eiffel/models
 /.nb-gradle/
 *.json
+src/main/java/net/praqma/tracey/protocol/eiffel/EiffelEventOuterClass.java
+src/main/java/net/praqma/tracey/protocol/eiffel/EiffelSourceChangeCreatedEventOuterClass.java
