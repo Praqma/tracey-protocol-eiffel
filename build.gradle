@@ -39,16 +39,6 @@ sourceSets {
     }
 }
 
-
-task uberjar(type: Jar, dependsOn: [':compileJava', ':processResources']) {
-    from files(sourceSets.main.output.classesDir)
-    from configurations.runtime.asFileTree.files.collect { zipTree(it) }
-
-    manifest {
-        attributes 'Main-Class': 'net.praqma.tracey.protocol.eiffel.cli.Main'
-    }
-}
-
 protobuf {
     // Configure the protoc executable
     protoc {
