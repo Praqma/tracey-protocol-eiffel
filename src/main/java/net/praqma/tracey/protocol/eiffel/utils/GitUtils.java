@@ -1,6 +1,7 @@
 package net.praqma.tracey.protocol.eiffel.utils;
 
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Author;
+import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeSubmittedEventOuterClass.EiffelSourceChangeSubmittedEvent.Submitter;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Change;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Issue;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.GitIdentifier;
@@ -158,6 +159,14 @@ public class GitUtils {
         author.setName(commit.getAuthorIdent().getName());
         // TODO: Have no idea where to get organisation and id
         return author.build();
+    }
+
+    public static Submitter getSubmitter(final RevCommit commit) {
+        final Submitter.Builder submitter = Submitter.newBuilder();
+        submitter.setEmail(commit.getCommitterIdent().getEmailAddress());
+        submitter.setName(commit.getCommitterIdent().getName());
+        // TODO: Have no idea where to get organisation and id
+        return submitter.build();
     }
 
     // TODO: parse issues from the commit message

@@ -36,7 +36,8 @@ public class EiffelSourceChangeCreatedEventFactory extends BaseFactory {
     public Message.Builder create() {
         final EiffelSourceChangeCreatedEvent.Builder event = EiffelSourceChangeCreatedEvent.newBuilder();
         event.setData(data);
-        event.setMeta(createMeta(Models.Meta.EiffelEventType.EiffelSourceChangeCreatedEvent, getSource()));
+        event.setMeta(createMeta(Models.Meta.EiffelEventType.EiffelSourceChangeCreatedEvent, source));
+        event.addAllLinks(links);
         return event;
     }
 }

@@ -1,22 +1,26 @@
 package net.praqma.tracey.protocol.eiffel.factories;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.logging.Logger;
 
 import com.google.protobuf.Message;
+import net.praqma.tracey.protocol.eiffel.models.Models.Link;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data;
 import net.praqma.tracey.protocol.eiffel.models.Models.Meta;
 
 public abstract class BaseFactory {
     private static final Logger log = Logger.getLogger( Meta.class.getName() );
-    private Data.Source source = null;
+    protected Data.Source source = null;
+    protected final List<Link> links = new ArrayList<>();
 
     public BaseFactory(final String host, final String name, final String uri, final String domainId, final Data.Serializer gav) {
         source = Data.Source.newBuilder().setHost(host).setName(name).setUri(uri).setDomainId(domainId).setSerializer(gav).build();
     }
 
-    public Data.Source getSource() {
-        return source;
+    public void addLink(final Link link) {
+        links.add(link);
     }
 
     public abstract Message.Builder create();
