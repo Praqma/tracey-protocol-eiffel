@@ -16,6 +16,7 @@ message Meta {
         EiffelArtifactPublishedEvent =2;
         EiffelSourceChangeCreatedEvent = 3;
         EiffelSourceChangeSubmittedEvent = 4;
+        EiffelCompositionDefinedEvent = 5;
     }
 }
 
