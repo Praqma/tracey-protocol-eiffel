@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package net.praqma.tracey.protocol.eiffel.events;
+
+import "models.proto";
+
+message EiffelArtifactCreatedEvent {
+    models.Meta meta = 1;
+    repeated models.Link links = 2;
+    EiffelArtifactCreatedEventData data = 3;
+
+    message EiffelArtifactCreatedEventData {
+        models.Data.Serializer gav = 1;
+        repeated FileInformation fileInformation = 2;
+        string buildCommand = 3;
+    }
+
+    message FileInformation {
+        string classifier = 1;
+        string extension = 2;
+    }
+}
+
