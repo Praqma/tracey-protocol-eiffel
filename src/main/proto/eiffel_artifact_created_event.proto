@@ -10,7 +10,7 @@ message EiffelArtifactCreatedEvent {
     EiffelArtifactCreatedEventData data = 3;
 
     message EiffelArtifactCreatedEventData {
-        models.Data.Serializer gav = 1;
+        models.Data.GAV gav = 1;
         repeated FileInformation fileInformation = 2;
         string buildCommand = 3;
     }

@@ -15,7 +15,7 @@ public abstract class BaseFactory {
     protected Data.Source source = null;
     protected final List<Link> links = new ArrayList<>();
 
-    public BaseFactory(final String host, final String name, final String uri, final String domainId, final Data.Serializer gav) {
+    public BaseFactory(final String host, final String name, final String uri, final String domainId, final Data.GAV gav) {
         source = Data.Source.newBuilder().setHost(host).setName(name).setUri(uri).setDomainId(domainId).setSerializer(gav).build();
         log.fine("New factory with the source: " + source.toString());
     }

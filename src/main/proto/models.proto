@@ -65,13 +65,20 @@ message Data {
         string host = 2;
         string name = 3;
         string uri = 4;
-        Serializer serializer = 5;
+        GAV serializer = 5;
     }
 
-    message Serializer {
+    message GAV {
         string groupId = 1;
         string artifactId = 2;
         string version = 3;
+    }
+
+    message Person {
+        string name = 1;
+        string email = 2;
+        string id = 3;
+        string organisation = 4;
     }
 
     message GitIdentifier {

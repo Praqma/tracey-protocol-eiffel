@@ -10,19 +10,12 @@ message EiffelSourceChangeCreatedEvent {
     EiffelSourceChangeCreatedEventData data = 3;
 
     message EiffelSourceChangeCreatedEventData {
-        Author author = 1;
+        models.Data.Person author = 1;
         repeated Issue issues = 2;
         Change change = 3;
         oneof identifier {
             models.Data.GitIdentifier gitIdentifier = 100;
         }
-    }
-
-    message Author {
-        string name = 1;
-        string email = 2;
-        string id = 3;
-        string organisation = 4;
     }
 
     message Change {

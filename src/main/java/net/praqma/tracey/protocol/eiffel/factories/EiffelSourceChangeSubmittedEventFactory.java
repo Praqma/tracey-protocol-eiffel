@@ -4,7 +4,7 @@ import com.google.protobuf.Message;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeSubmittedEventOuterClass.EiffelSourceChangeSubmittedEvent;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeSubmittedEventOuterClass.EiffelSourceChangeSubmittedEvent.EiffelSourceChangeSubmittedEventData;
 import net.praqma.tracey.protocol.eiffel.models.Models;
-import net.praqma.tracey.protocol.eiffel.models.Models.Data.Serializer;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.GAV;
 import net.praqma.tracey.protocol.eiffel.utils.GitUtils;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -16,7 +16,7 @@ public class EiffelSourceChangeSubmittedEventFactory extends BaseFactory {
     private static final Logger log = Logger.getLogger( EiffelSourceChangeSubmittedEventFactory.class.getName() );
     private static final EiffelSourceChangeSubmittedEventData.Builder data = EiffelSourceChangeSubmittedEventData.newBuilder();
 
-    public EiffelSourceChangeSubmittedEventFactory(final String host, final String name, final String uri, final String domainId, final Serializer gav) {
+    public EiffelSourceChangeSubmittedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
     }
 

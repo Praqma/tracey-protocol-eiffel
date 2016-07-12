@@ -4,7 +4,7 @@ import com.google.protobuf.Message;
 import net.praqma.tracey.protocol.eiffel.events.EiffelArtifactCreatedEventOuterClass.EiffelArtifactCreatedEvent;
 import net.praqma.tracey.protocol.eiffel.events.EiffelArtifactCreatedEventOuterClass.EiffelArtifactCreatedEvent.FileInformation;
 import net.praqma.tracey.protocol.eiffel.events.EiffelArtifactCreatedEventOuterClass.EiffelArtifactCreatedEvent.EiffelArtifactCreatedEventData;
-import net.praqma.tracey.protocol.eiffel.models.Models.Data.Serializer;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.GAV;
 import net.praqma.tracey.protocol.eiffel.models.Models.Meta;
 import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
@@ -20,7 +20,7 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     private static final EiffelArtifactCreatedEventData.Builder data = EiffelArtifactCreatedEventData.newBuilder();
     private static final List<FileInformation> fileInformationList = new ArrayList<>();
 
-    public EiffelArtifactCreatedEventFactory(final String host, final String name, final String uri, final String domainId, final Serializer gav) {
+    public EiffelArtifactCreatedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
     }
 
@@ -38,7 +38,7 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     }
 
     public void setGav(final String groupId, final String artifactId, final String version) {
-        final Serializer.Builder gav = Serializer.newBuilder();
+        final GAV.Builder gav = GAV.newBuilder();
         gav.setGroupId(groupId).setArtifactId(artifactId).setVersion(version);
         data.setGav(gav.build());
         log.fine("Set GAV to the following:\nGroupId " + data.getGav().getGroupId());

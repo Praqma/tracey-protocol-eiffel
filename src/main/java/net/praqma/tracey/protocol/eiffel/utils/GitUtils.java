@@ -1,10 +1,9 @@
 package net.praqma.tracey.protocol.eiffel.utils;
 
-import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Author;
-import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeSubmittedEventOuterClass.EiffelSourceChangeSubmittedEvent.Submitter;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Change;
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Issue;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.GitIdentifier;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.Person;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
@@ -152,16 +151,16 @@ public class GitUtils {
         return gitId.build();
     }
 
-    public static Author getAuthor(final RevCommit commit) {
-        final Author.Builder author = Author.newBuilder();
+    public static Person getAuthor(final RevCommit commit) {
+        final Person.Builder author = Person.newBuilder();
         author.setEmail(commit.getAuthorIdent().getEmailAddress());
         author.setName(commit.getAuthorIdent().getName());
         // TODO: Have no idea where to get organisation and id
         return author.build();
     }
 
-    public static Submitter getSubmitter(final RevCommit commit) {
-        final Submitter.Builder submitter = Submitter.newBuilder();
+    public static Person getSubmitter(final RevCommit commit) {
+        final Person.Builder submitter = Person.newBuilder();
         submitter.setEmail(commit.getCommitterIdent().getEmailAddress());
         submitter.setName(commit.getCommitterIdent().getName());
         // TODO: Have no idea where to get organisation and id

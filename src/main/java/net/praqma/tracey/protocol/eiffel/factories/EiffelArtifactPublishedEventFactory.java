@@ -3,7 +3,7 @@ package net.praqma.tracey.protocol.eiffel.factories;
 import com.google.protobuf.Message;
 import net.praqma.tracey.protocol.eiffel.events.EiffelArtifactPublishedEventOuterClass.EiffelArtifactPublishedEvent;
 import net.praqma.tracey.protocol.eiffel.events.EiffelArtifactPublishedEventOuterClass.EiffelArtifactPublishedEvent.EiffelArtifactPublishedEventData;
-import net.praqma.tracey.protocol.eiffel.models.Models.Data.Serializer;
+import net.praqma.tracey.protocol.eiffel.models.Models.Data.GAV;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.Location;
 import net.praqma.tracey.protocol.eiffel.models.Models.Meta;
 
@@ -16,7 +16,7 @@ public class EiffelArtifactPublishedEventFactory extends BaseFactory {
     private static final EiffelArtifactPublishedEventData.Builder data = EiffelArtifactPublishedEventData.newBuilder();
     private static final List<Location> locations = new ArrayList<>();
 
-    public EiffelArtifactPublishedEventFactory(final String host, final String name, final String uri, final String domainId, final Serializer gav) {
+    public EiffelArtifactPublishedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
     }
 

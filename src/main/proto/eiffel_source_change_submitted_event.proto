@@ -10,16 +10,9 @@ message EiffelSourceChangeSubmittedEvent {
     EiffelSourceChangeSubmittedEventData data = 3;
 
     message EiffelSourceChangeSubmittedEventData {
-        Submitter submitter = 1;
+        models.Data.Person submitter = 1;
         oneof identifier {
             models.Data.GitIdentifier gitIdentifier = 100;
         }
-    }
-
-    message Submitter {
-        string name = 1;
-        string email = 2;
-        string id = 3;
-        string organisation = 4;
     }
 }

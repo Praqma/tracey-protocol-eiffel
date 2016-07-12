@@ -19,13 +19,6 @@ message EiffelConfidenceLevelModifiedEvent {
     message EiffelConfidenceLevelModifiedEventData {
         string name = 1;
         EiffelConfidenceLevelType value = 2;
-        Issuer issuer = 3;
-    }
-
-    message Issuer {
-        string name = 1;
-        string email = 2;
-        string id = 3;
-        string organisation = 4;
+        models.Data.Person issuer = 3;
     }
 }
