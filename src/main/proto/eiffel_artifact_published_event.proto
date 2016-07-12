@@ -9,8 +9,15 @@ message EiffelArtifactPublishedEvent {
     repeated models.Link links = 2;
     EiffelArtifactPublishedEventData data = 3;
 
+    enum LocationType {
+        NONE = 0; // Protobuf 3 will skill element 0 to be compatible with the protobuf 2 https://developers.google.com/protocol-buffers/docs/proto3#enum
+        ARTIFACTORY = 1;
+        NEXUS =2;
+        PLAIN = 3;
+        OTHER = 4;
+    }
+
     message EiffelArtifactPublishedEventData {
         repeated models.Data.Location locations = 1;
     }
 }
-
