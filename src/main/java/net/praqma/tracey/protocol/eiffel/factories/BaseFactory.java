@@ -17,9 +17,11 @@ public abstract class BaseFactory {
 
     public BaseFactory(final String host, final String name, final String uri, final String domainId, final Data.Serializer gav) {
         source = Data.Source.newBuilder().setHost(host).setName(name).setUri(uri).setDomainId(domainId).setSerializer(gav).build();
+        log.fine("New factory with the source: " + source.toString());
     }
 
     public void addLink(final Link link) {
+        log.fine("Add link " + link.toString());
         links.add(link);
     }
 
@@ -31,6 +33,7 @@ public abstract class BaseFactory {
         meta.setType(type);
         meta.setTime(java.lang.System.currentTimeMillis());
         meta.setSource(source);
+        log.fine("Create new meta " + meta.toString());
         return meta.build();
     }
 }

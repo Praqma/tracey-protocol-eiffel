@@ -27,7 +27,7 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     }
 
     public void parseFromPom(final String path) throws IOException, XmlPullParserException {
-        log.fine("Read GAV details from " + path);
+        log.fine("Read EiffelArtifactCreatedEvent GAV details from " + path);
         final BufferedReader in = new BufferedReader(new FileReader(path));
         final MavenXpp3Reader reader = new MavenXpp3Reader();
         final Model model = reader.read(in);

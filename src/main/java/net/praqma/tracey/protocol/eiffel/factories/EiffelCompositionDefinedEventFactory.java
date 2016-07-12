@@ -6,7 +6,6 @@ import net.praqma.tracey.protocol.eiffel.events.EiffelCompositionDefinedEventOut
 import net.praqma.tracey.protocol.eiffel.models.Models;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.Serializer;
 
-import java.io.IOException;
 import java.util.logging.Logger;
 
 public class EiffelCompositionDefinedEventFactory extends BaseFactory {
@@ -17,7 +16,8 @@ public class EiffelCompositionDefinedEventFactory extends BaseFactory {
         super(host, name, uri, domainId, gav);
     }
 
-    public void setName(final String name) throws IOException {
+    public void setName(final String name) {
+        log.fine("Set composition name to " + name);
         data.setName(name);
     }
 

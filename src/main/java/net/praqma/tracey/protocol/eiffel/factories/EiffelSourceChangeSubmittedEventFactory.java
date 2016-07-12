@@ -21,10 +21,13 @@ public class EiffelSourceChangeSubmittedEventFactory extends BaseFactory {
     }
 
     public void parseFromGit(final String path, final String commitId, final String branch) throws IOException {
+        log.fine("Parse EiffelSourceChangeSubmittedEvent details from repo " + path + " commit " + commitId + " branch " + branch);
         final Repository repository = GitUtils.openRepository(path);
         final RevCommit commit = GitUtils.getCommitById(repository, commitId);
         data.setGitIdentifier(GitUtils.getGitId(repository, commitId, branch));
         data.setSubmitter(GitUtils.getSubmitter(commit));
+        log.fine("Set submitter to " + data.getSubmitter().toString());
+        log.fine("Set Git identifier to " + data.getGitIdentifier().toString());
     }
 
     @Override
