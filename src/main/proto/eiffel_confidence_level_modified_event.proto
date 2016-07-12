@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package net.praqma.tracey.protocol.eiffel.events;
+
+import "models.proto";
+
+message EiffelConfidenceLevelModifiedEvent {
+    models.Meta meta = 1;
+    repeated models.Link links = 2;
+    EiffelConfidenceLevelModifiedEventData data = 3;
+
+    enum EiffelConfidenceLevelType {
+        NONE = 0; // Protobuf 3 will skill element 0 to be compatible with the protobuf 2 https://developers.google.com/protocol-buffers/docs/proto3#enum
+        SUCCESS = 1;
+        FAILURE =2;
+        INCONCLUSIVE = 3;
+    }
+
+    message EiffelConfidenceLevelModifiedEventData {
+        string name = 1;
+        EiffelConfidenceLevelType value = 2;
+        Issuer issuer = 3;
+    }
+
+    message Issuer {
+        string name = 1;
+        string email = 2;
+        string id = 3;
+        string organisation = 4;
+    }
+}
