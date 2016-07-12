@@ -10,9 +10,7 @@ import org.apache.maven.model.Model;
 import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -28,7 +26,7 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
 
     public void parseFromPom(final String path) throws IOException, XmlPullParserException {
         log.fine("Read EiffelArtifactCreatedEvent GAV details from " + path);
-        final BufferedReader in = new BufferedReader(new FileReader(path));
+        final BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8"));
         final MavenXpp3Reader reader = new MavenXpp3Reader();
         final Model model = reader.read(in);
         setGav(model.getGroupId(), model.getArtifactId(), model.getVersion());
