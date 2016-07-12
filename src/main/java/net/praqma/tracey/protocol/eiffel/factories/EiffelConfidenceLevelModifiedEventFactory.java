@@ -38,7 +38,7 @@ public class EiffelConfidenceLevelModifiedEventFactory extends BaseFactory {
     public Message.Builder create() {
         final EiffelConfidenceLevelModifiedEvent.Builder event = EiffelConfidenceLevelModifiedEvent.newBuilder();
         event.setData(data);
-        event.setMeta(createMeta(Meta.EiffelEventType.EiffelCompositionDefinedEvent, source));
+        event.setMeta(createMeta(Meta.EiffelEventType.EiffelConfidenceLevelModifiedEvent, source));
         event.addAllLinks(links);
         return event;
     }
