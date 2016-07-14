@@ -44,6 +44,12 @@ sourceSets {
     }
 }
 
+jar {
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
+}
+
 protobuf {
     // Configure the protoc executable
     protoc {
