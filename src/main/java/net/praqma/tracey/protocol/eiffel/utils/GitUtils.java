@@ -4,6 +4,8 @@ import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOu
 import net.praqma.tracey.protocol.eiffel.events.EiffelSourceChangeCreatedEventOuterClass.EiffelSourceChangeCreatedEvent.Issue;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.GitIdentifier;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.Person;
+import net.praqma.utils.parsers.cmg.api.CommitMessageParser;
+import net.praqma.utils.parsers.cmg.api.TransitionType;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.Edit;
@@ -19,6 +21,7 @@ import org.eclipse.jgit.util.io.DisabledOutputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -168,8 +171,25 @@ public class GitUtils {
     }
 
     // TODO: parse issues from the commit message
-    public static List<Issue> getIssues(final RevCommit commit) {
+    public static List<Issue> getIssues(final RevCommit commit, final CommitMessageParser parser) throws MalformedURLException {
         List<Issue> issues = new ArrayList<>();
+        List<net.praqma.utils.parsers.cmg.api.Issue> parsedIssues = parser.parse(commit.getFullMessage());
+        for (net.praqma.utils.parsers.cmg.api.Issue parsedIssue:parsedIssues) {
+            Issue.Builder issue = Issue.newBuilder();
+            issue.setTrackerType(parser.getClass().getName().replace(".java", ""));
+            issue.setId(parsedIssue.getIssue());
+            issue.setUri(parsedIssue.getUrl().toString());
+            if (parsedIssue.getTransition() == TransitionType.REFERENCE) {
+                issue.setTransition(Issue.Transition.PARTIAL);
+            } else if (parsedIssue.getTransition() == TransitionType.RESOLVE) {
+                issue.setTransition(Issue.Transition.RESOLVED);
+            } else if (parsedIssue.getTransition() == TransitionType.REVERT) {
+                issue.setTransition(Issue.Transition.REMOVED);
+            } else {
+                issue.setTransition(Issue.Transition.UNRECOGNIZED);
+            }
+            issues.add(issue.build());
+        }
         return issues;
     }
 }

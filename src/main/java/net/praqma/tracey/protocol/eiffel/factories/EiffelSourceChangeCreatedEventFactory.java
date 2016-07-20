@@ -10,26 +10,27 @@ import net.praqma.tracey.protocol.eiffel.utils.GitUtils;
 
 import java.util.logging.Logger;
 
+import net.praqma.utils.parsers.cmg.api.CommitMessageParser;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.IOException;
 
 public class EiffelSourceChangeCreatedEventFactory extends BaseFactory {
-    private static final Logger log = Logger.getLogger( EiffelSourceChangeCreatedEventFactory.class.getName() );
+    private static final Logger log = Logger.getLogger(EiffelSourceChangeCreatedEventFactory.class.getName());
     private static final EiffelSourceChangeCreatedEventData.Builder data = EiffelSourceChangeCreatedEventData.newBuilder();
 
     public EiffelSourceChangeCreatedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
     }
 
-    public void parseFromGit(final String path, final String commitId, final String branch) throws IOException {
+    public void parseFromGit(final String path, final String commitId, final String branch, final CommitMessageParser parser) throws IOException {
         log.fine("Parse EiffelSourceChangeCreatedEvent details from repo " + path + " commit " + commitId + " branch " + branch);
         final Repository repository = GitUtils.openRepository(path);
         final RevCommit commit = GitUtils.getCommitById(repository, commitId);
         data.setGitIdentifier(GitUtils.getGitId(repository, commitId, branch));
         data.setAuthor(GitUtils.getAuthor(commit));
-        data.addAllIssues(GitUtils.getIssues(commit));
+        data.addAllIssues(GitUtils.getIssues(commit, parser));
         data.setChange(GitUtils.getChange(repository, commit));
         log.fine("Set author to " + data.getAuthor().toString());
         log.fine("Set Git identifier to " + data.getGitIdentifier().toString());
