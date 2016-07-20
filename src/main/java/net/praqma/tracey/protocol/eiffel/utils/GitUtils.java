@@ -170,13 +170,12 @@ public class GitUtils {
         return submitter.build();
     }
 
-    // TODO: parse issues from the commit message
     public static List<Issue> getIssues(final RevCommit commit, final CommitMessageParser parser) throws MalformedURLException {
         List<Issue> issues = new ArrayList<>();
         List<net.praqma.utils.parsers.cmg.api.Issue> parsedIssues = parser.parse(commit.getFullMessage());
         for (net.praqma.utils.parsers.cmg.api.Issue parsedIssue:parsedIssues) {
             Issue.Builder issue = Issue.newBuilder();
-            issue.setTrackerType(parser.getClass().getName().replace(".java", ""));
+            issue.setTrackerType(parser.getClass().getSimpleName());
             issue.setId(parsedIssue.getIssue());
             issue.setUri(parsedIssue.getUrl().toString());
             if (parsedIssue.getTransition() == TransitionType.REFERENCE) {
