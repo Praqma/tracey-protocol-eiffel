@@ -26,9 +26,10 @@ message EiffelSourceChangeCreatedEvent {
 
     message Issue {
         enum Transition {
-            RESOLVED = 0;
-            PARTIAL = 1;
-            REMOVED = 2;
+            NONE = 0; // Protobuf 3 will skill element 0 to be compatible with the protobuf 2 https://developers.google.com/protocol-buffers/docs/proto3#enum
+            RESOLVED = 1;
+            PARTIAL = 2;
+            REMOVED = 3;
         }
         string id = 1;
         Transition transition = 2;
