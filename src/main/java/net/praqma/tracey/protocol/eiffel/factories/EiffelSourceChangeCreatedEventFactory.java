@@ -24,6 +24,14 @@ public class EiffelSourceChangeCreatedEventFactory extends BaseFactory {
         super(host, name, uri, domainId, gav);
     }
 
+    public EiffelSourceChangeCreatedEventFactory(final String name, final String uri, final String domainId, final GAV gav) {
+        super(name, uri, domainId, gav);
+    }
+
+    public EiffelSourceChangeCreatedEventFactory(final String name, final String uri, final String domainId) {
+        super(name, uri, domainId);
+    }
+
     public void parseFromGit(final String path, final String commitId, final String branch, final CommitMessageParser parser) throws IOException {
         log.fine("Parse EiffelSourceChangeCreatedEvent details from repo " + path + " commit " + commitId + " branch " + branch);
         final Repository repository = GitUtils.openRepository(path);

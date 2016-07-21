@@ -18,6 +18,14 @@ public class EiffelConfidenceLevelModifiedEventFactory extends BaseFactory {
         super(host, name, uri, domainId, gav);
     }
 
+    public EiffelConfidenceLevelModifiedEventFactory(final String name, final String uri, final String domainId, final GAV gav) {
+        super(name, uri, domainId, gav);
+    }
+
+    public EiffelConfidenceLevelModifiedEventFactory(final String name, final String uri, final String domainId) {
+        super(name, uri, domainId);
+    }
+
     public void setName(final String name) {
         log.fine("Set confidence level name to " + name);
         data.setName(name);

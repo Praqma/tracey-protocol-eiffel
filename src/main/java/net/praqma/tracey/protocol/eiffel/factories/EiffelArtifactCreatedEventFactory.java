@@ -24,6 +24,14 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
         super(host, name, uri, domainId, gav);
     }
 
+    public EiffelArtifactCreatedEventFactory(final String name, final String uri, final String domainId, final GAV gav) {
+        super(name, uri, domainId, gav);
+    }
+
+    public EiffelArtifactCreatedEventFactory(final String name, final String uri, final String domainId) {
+        super(name, uri, domainId);
+    }
+
     public void parseFromPom(final String path) throws IOException, XmlPullParserException {
         log.fine("Read EiffelArtifactCreatedEvent GAV details from " + path);
 

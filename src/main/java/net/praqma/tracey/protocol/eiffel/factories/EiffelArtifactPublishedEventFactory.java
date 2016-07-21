@@ -20,6 +20,14 @@ public class EiffelArtifactPublishedEventFactory extends BaseFactory {
         super(host, name, uri, domainId, gav);
     }
 
+    public EiffelArtifactPublishedEventFactory(final String name, final String uri, final String domainId, final GAV gav) {
+        super(name, uri, domainId, gav);
+    }
+
+    public EiffelArtifactPublishedEventFactory(final String name, final String uri, final String domainId) {
+        super(name, uri, domainId);
+    }
+
     public void addLocation(Location location) {
         log.fine("Add artifact location " + location.toString());
         locations.add(location);
