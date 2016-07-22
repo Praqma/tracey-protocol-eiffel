@@ -15,7 +15,7 @@ import net.praqma.tracey.protocol.eiffel.models.Models.Data;
 import net.praqma.tracey.protocol.eiffel.models.Models.Meta;
 
 public abstract class BaseFactory {
-    private static final Logger LOG = Logger.getLogger( Meta.class.getName() );
+    private static final Logger LOG = Logger.getLogger( BaseFactory.class.getName() );
     protected Data.Source source = null;
     protected final List<Link> links = new ArrayList<>();
 
