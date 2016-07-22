@@ -18,7 +18,7 @@ import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class EiffelCompositionDefinedEventFactory extends BaseFactory {
     private static final Logger LOG = Logger.getLogger( EiffelCompositionDefinedEventFactory.class.getName() );
-    private static final EiffelCompositionDefinedEventData.Builder DATA = EiffelCompositionDefinedEventData.newBuilder();
+    private final EiffelCompositionDefinedEventData.Builder data = EiffelCompositionDefinedEventData.newBuilder();
 
     public EiffelCompositionDefinedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
@@ -34,7 +34,7 @@ public class EiffelCompositionDefinedEventFactory extends BaseFactory {
 
     public void setName(final String name) {
         LOG.log(Level.FINE, "Set composition name to {0}", name);
-        DATA.setName(name);
+        data.setName(name);
     }
 
     public void parseFromPom(String pomPath) throws IOException, XmlPullParserException {
@@ -49,7 +49,7 @@ public class EiffelCompositionDefinedEventFactory extends BaseFactory {
     @Override
     public Message.Builder create() {
         final EiffelCompositionDefinedEvent.Builder event = EiffelCompositionDefinedEvent.newBuilder();
-        event.setData(DATA);
+        event.setData(data);
         event.setMeta(createMeta(Models.Meta.EiffelEventType.EiffelCompositionDefinedEvent, source));
         event.addAllLinks(links);
         return event;

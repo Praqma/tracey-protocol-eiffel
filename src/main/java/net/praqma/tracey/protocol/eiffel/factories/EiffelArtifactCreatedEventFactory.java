@@ -17,8 +17,8 @@ import java.util.logging.Logger;
 
 public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     private static final Logger LOG = Logger.getLogger( EiffelArtifactCreatedEventFactory.class.getName() );
-    private static final EiffelArtifactCreatedEventData.Builder DATA = EiffelArtifactCreatedEventData.newBuilder();
-    private static final List<FileInformation> FILEINFORMATIONLIST = new ArrayList<>();
+    private final EiffelArtifactCreatedEventData.Builder data = EiffelArtifactCreatedEventData.newBuilder();
+    private final List<FileInformation> fileinformationlist = new ArrayList<>();
 
     public EiffelArtifactCreatedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
@@ -44,28 +44,28 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
 
     public void setBuildCommand(final String command) {
         LOG.fine(String.format("Set build command to %s", command));
-        DATA.setBuildCommand(command);
+        data.setBuildCommand(command);
     }
 
     public void setGav(final String groupId, final String artifactId, final String version) {
         final GAV.Builder gav = GAV.newBuilder();
         gav.setGroupId(groupId).setArtifactId(artifactId).setVersion(version);
-        DATA.setGav(gav.build());
-        LOG.fine(String.format("Set GAV to the following:%nGroupId %s", DATA.getGav().getGroupId()));
-        LOG.fine(String.format("ArtifactId %s", DATA.getGav().getArtifactId()));
-        LOG.fine(String.format("Version %s", DATA.getGav().getVersion()));
+        data.setGav(gav.build());
+        LOG.fine(String.format("Set GAV to the following:%nGroupId %s", data.getGav().getGroupId()));
+        LOG.fine(String.format("ArtifactId %s", data.getGav().getArtifactId()));
+        LOG.fine(String.format("Version %s", data.getGav().getVersion()));
     }
 
     public void addFileInformation(FileInformation fileInformation) {
         LOG.fine(String.format("Add file information %s", fileInformation.toString()));
-        FILEINFORMATIONLIST.add(fileInformation);
+        fileinformationlist.add(fileInformation);
     }
 
     @Override
     public Message.Builder create() {
         final EiffelArtifactCreatedEvent.Builder event = EiffelArtifactCreatedEvent.newBuilder();
-        DATA.addAllFileInformation(FILEINFORMATIONLIST);
-        event.setData(DATA);
+        data.addAllFileInformation(fileinformationlist);
+        event.setData(data);
         event.setMeta(createMeta(Meta.EiffelEventType.EiffelArtifactCreatedEvent, source));
         event.addAllLinks(links);
         return event;

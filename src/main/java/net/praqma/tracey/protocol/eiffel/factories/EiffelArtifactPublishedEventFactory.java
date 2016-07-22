@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 
 public class EiffelArtifactPublishedEventFactory extends BaseFactory {
     private static final Logger LOG = Logger.getLogger( EiffelArtifactPublishedEventFactory.class.getName() );
-    private static final EiffelArtifactPublishedEventData.Builder DATA = EiffelArtifactPublishedEventData.newBuilder();
-    private static final List<Location> LOCATIONS = new ArrayList<>();
+    private final EiffelArtifactPublishedEventData.Builder data = EiffelArtifactPublishedEventData.newBuilder();
+    private final List<Location> locations = new ArrayList<>();
 
     public EiffelArtifactPublishedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
@@ -31,14 +31,14 @@ public class EiffelArtifactPublishedEventFactory extends BaseFactory {
 
     public void addLocation(Location location) {
         LOG.log(Level.FINE, "Add artifact location %s", location.toString());
-        LOCATIONS.add(location);
+        locations.add(location);
     }
 
     @Override
     public Message.Builder create() {
         final EiffelArtifactPublishedEvent.Builder event = EiffelArtifactPublishedEvent.newBuilder();
-        DATA.addAllLocations(LOCATIONS);
-        event.setData(DATA);
+        data.addAllLocations(locations);
+        event.setData(data);
         event.setMeta(createMeta(Meta.EiffelEventType.EiffelArtifactPublishedEvent, source));
         event.addAllLinks(links);
         return event;
