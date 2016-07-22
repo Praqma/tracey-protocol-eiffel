@@ -16,9 +16,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class EiffelArtifactCreatedEventFactory extends BaseFactory {
-    private static final Logger log = Logger.getLogger( EiffelArtifactCreatedEventFactory.class.getName() );
-    private static final EiffelArtifactCreatedEventData.Builder data = EiffelArtifactCreatedEventData.newBuilder();
-    private static final List<FileInformation> fileInformationList = new ArrayList<>();
+    private static final Logger LOG = Logger.getLogger( EiffelArtifactCreatedEventFactory.class.getName() );
+    private static final EiffelArtifactCreatedEventData.Builder DATA = EiffelArtifactCreatedEventData.newBuilder();
+    private static final List<FileInformation> FILEINFORMATIONLIST = new ArrayList<>();
 
     public EiffelArtifactCreatedEventFactory(final String host, final String name, final String uri, final String domainId, final GAV gav) {
         super(host, name, uri, domainId, gav);
@@ -33,7 +33,7 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     }
 
     public void parseFromPom(final String path) throws IOException, XmlPullParserException {
-        log.fine("Read EiffelArtifactCreatedEvent GAV details from " + path);
+        LOG.fine(String.format("Read EiffelArtifactCreatedEvent GAV details from %s", path));
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(path), "UTF-8")) ) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
@@ -43,29 +43,29 @@ public class EiffelArtifactCreatedEventFactory extends BaseFactory {
     }
 
     public void setBuildCommand(final String command) {
-        log.fine("Set build command to " + command);
-        data.setBuildCommand(command);
+        LOG.fine(String.format("Set build command to %s", command));
+        DATA.setBuildCommand(command);
     }
 
     public void setGav(final String groupId, final String artifactId, final String version) {
         final GAV.Builder gav = GAV.newBuilder();
         gav.setGroupId(groupId).setArtifactId(artifactId).setVersion(version);
-        data.setGav(gav.build());
-        log.fine("Set GAV to the following:\nGroupId " + data.getGav().getGroupId());
-        log.fine("ArtifactId " + data.getGav().getArtifactId());
-        log.fine("Version " + data.getGav().getVersion());
+        DATA.setGav(gav.build());
+        LOG.fine(String.format("Set GAV to the following:%nGroupId %s", DATA.getGav().getGroupId()));
+        LOG.fine(String.format("ArtifactId %s", DATA.getGav().getArtifactId()));
+        LOG.fine(String.format("Version %s", DATA.getGav().getVersion()));
     }
 
     public void addFileInformation(FileInformation fileInformation) {
-        log.fine("Add file information " + fileInformation.toString());
-        fileInformationList.add(fileInformation);
+        LOG.fine(String.format("Add file information %s", fileInformation.toString()));
+        FILEINFORMATIONLIST.add(fileInformation);
     }
 
     @Override
     public Message.Builder create() {
         final EiffelArtifactCreatedEvent.Builder event = EiffelArtifactCreatedEvent.newBuilder();
-        data.addAllFileInformation(fileInformationList);
-        event.setData(data);
+        DATA.addAllFileInformation(FILEINFORMATIONLIST);
+        event.setData(DATA);
         event.setMeta(createMeta(Meta.EiffelEventType.EiffelArtifactCreatedEvent, source));
         event.addAllLinks(links);
         return event;

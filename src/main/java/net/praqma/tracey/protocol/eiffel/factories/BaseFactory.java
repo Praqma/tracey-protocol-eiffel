@@ -9,32 +9,33 @@ import java.util.logging.Logger;
 
 import com.google.protobuf.Message;
 import com.jcabi.manifests.Manifests;
+import java.util.logging.Level;
 import net.praqma.tracey.protocol.eiffel.models.Models.Link;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data;
 import net.praqma.tracey.protocol.eiffel.models.Models.Meta;
 
 public abstract class BaseFactory {
-    private static final Logger log = Logger.getLogger( Meta.class.getName() );
+    private static final Logger LOG = Logger.getLogger( Meta.class.getName() );
     protected Data.Source source = null;
     protected final List<Link> links = new ArrayList<>();
 
     public BaseFactory(final String host, final String name, final String uri, final String domainId, final Data.GAV gav) {
         source = Data.Source.newBuilder().setHost(host).setName(name).setUri(uri).setDomainId(domainId).setSerializer(gav).build();
-        log.fine("New factory with the source: " + source.toString());
+        LOG.log(Level.FINE, "New factory with the source: {0}", source.toString());
     }
 
     public BaseFactory(final String name, final String uri, final String domainId, final Data.GAV gav) {
         source = Data.Source.newBuilder().setHost(getHostName()).setName(name).setUri(uri).setDomainId(domainId).setSerializer(gav).build();
-        log.fine("New factory with the source: " + source.toString());
+        LOG.log(Level.FINE, "New factory with the source: {0}", source.toString());
     }
 
     public BaseFactory(final String name, final String uri, final String domainId) {
         source = Data.Source.newBuilder().setHost(getHostName()).setName(name).setUri(uri).setDomainId(domainId).setSerializer(getGAV()).build();
-        log.fine("New factory with the source: " + source.toString());
+        LOG.log(Level.FINE, "New factory with the source: {0}", source.toString());
     }
 
     public void addLink(final Link link) {
-        log.fine("Add link " + link.toString());
+        LOG.log(Level.FINE, "Add link {0}", link.toString());
         links.add(link);
     }
 
@@ -46,7 +47,7 @@ public abstract class BaseFactory {
         meta.setType(type);
         meta.setTime(java.lang.System.currentTimeMillis());
         meta.setSource(source);
-        log.fine("Return meta: " + meta.toString());
+        LOG.log(Level.FINE, "Create new meta {0}", meta.toString());
         return meta.build();
     }
 
@@ -57,9 +58,9 @@ public abstract class BaseFactory {
             hostname = InetAddress.getLocalHost().getHostName();
         }
         catch (UnknownHostException e) {
-            log.warning("Hostname can not be resolved due to the following. Use " + hostname + " as a hostname\n" + e.getMessage());
+            LOG.log(Level.WARNING, "Hostname can not be resolved due to the following. Use {0} as a hostname\n{1}", new Object[]{hostname, e.getMessage()});
         }
-        log.fine("Return hostname: " + hostname);
+        LOG.log(Level.FINE, "Return hostname: {0}", hostname);
         return hostname;
     }
 
@@ -69,7 +70,7 @@ public abstract class BaseFactory {
                 .setArtifactId(Manifests.read("Implementation-Title"))
                 .setVersion(Manifests.read("Implementation-Version"))
                 .build();
-        log.fine("Return GAV: " + gav.toString());
+        LOG.log(Level.FINE, "Return GAV: {0}", gav.toString());
         return gav;
     }
 }
