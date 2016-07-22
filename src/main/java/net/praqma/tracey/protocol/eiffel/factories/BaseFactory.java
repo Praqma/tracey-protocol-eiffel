@@ -40,7 +40,7 @@ public abstract class BaseFactory {
     }
 
     public void clearLinks() {
-        log.fine("Clear all links");
+        LOG.fine("Clear all links");
         links.clear();
     }
 
