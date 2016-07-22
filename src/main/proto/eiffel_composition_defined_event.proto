@@ -11,6 +11,5 @@ message EiffelCompositionDefinedEvent {
 
     message EiffelCompositionDefinedEventData {
         string name = 1;
-		string version = 2;
     }
 }

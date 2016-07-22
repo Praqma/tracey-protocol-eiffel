@@ -37,19 +37,12 @@ public class EiffelCompositionDefinedEventFactory extends BaseFactory {
         DATA.setName(name);
     }
 
-    public void setVersion(String version) {
-        LOG.log(Level.FINE, "Set composition version to {0}", version);
-        DATA.setVersion(version);
-
-    }
-
     public void parseFromPom(String pomPath) throws IOException, XmlPullParserException {
         LOG.fine(String.format("Read EiffelCompositionDefinedEvent GAV details from %s", pomPath));
 
         try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pomPath), "UTF-8")) ) {
             MavenXpp3Reader reader = new MavenXpp3Reader();
             Model model = reader.read(in);
-            DATA.setVersion(model.getVersion());
         }
     }
 
