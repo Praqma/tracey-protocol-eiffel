@@ -39,6 +39,11 @@ public abstract class BaseFactory {
         links.add(link);
     }
 
+    public void clearLinks() {
+        log.fine("Clear all links");
+        links.clear();
+    }
+
     public abstract Message.Builder create();
 
     public Meta createMeta(final Meta.EiffelEventType type, final Data.Source source) {
