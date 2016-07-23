@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/Praqma/tracey-protocol-eiffel.svg?branch=master)](https://travis-ci.org/Praqma/tracey-protocol-eiffel)
+
 ## Intro
 Current best thinking for the [Ericsson Eiffel protocol](https://github.com/Ericsson/eiffel) implementation
 
