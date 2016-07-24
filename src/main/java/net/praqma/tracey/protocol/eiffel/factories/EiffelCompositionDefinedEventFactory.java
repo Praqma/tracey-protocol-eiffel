@@ -1,10 +1,6 @@
 package net.praqma.tracey.protocol.eiffel.factories;
 
 import com.google.protobuf.Message;
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.logging.Level;
 import net.praqma.tracey.protocol.eiffel.events.EiffelCompositionDefinedEventOuterClass.EiffelCompositionDefinedEvent;
 import net.praqma.tracey.protocol.eiffel.events.EiffelCompositionDefinedEventOuterClass.EiffelCompositionDefinedEvent.EiffelCompositionDefinedEventData;
@@ -12,9 +8,6 @@ import net.praqma.tracey.protocol.eiffel.models.Models;
 import net.praqma.tracey.protocol.eiffel.models.Models.Data.GAV;
 
 import java.util.logging.Logger;
-import org.apache.maven.model.Model;
-import org.apache.maven.model.io.xpp3.MavenXpp3Reader;
-import org.codehaus.plexus.util.xml.pull.XmlPullParserException;
 
 public class EiffelCompositionDefinedEventFactory extends BaseFactory {
     private static final Logger LOG = Logger.getLogger( EiffelCompositionDefinedEventFactory.class.getName() );
@@ -35,15 +28,6 @@ public class EiffelCompositionDefinedEventFactory extends BaseFactory {
     public void setName(final String name) {
         LOG.log(Level.FINE, "Set composition name to {0}", name);
         data.setName(name);
-    }
-
-    public void parseFromPom(String pomPath) throws IOException, XmlPullParserException {
-        LOG.fine(String.format("Read EiffelCompositionDefinedEvent GAV details from %s", pomPath));
-
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(new FileInputStream(pomPath), "UTF-8")) ) {
-            MavenXpp3Reader reader = new MavenXpp3Reader();
-            Model model = reader.read(in);
-        }
     }
 
     @Override
