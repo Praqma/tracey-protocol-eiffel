@@ -143,13 +143,18 @@ public class GitUtils {
         final Config storedConfig = repository.getConfig();
         // Pick first remote
         final Set<String> remotes = storedConfig.getSubsections("remote");
-        if ( ! remotes.isEmpty() ) {
-            final String uri = storedConfig.getString("remote", remotes.iterator().next(), "url");
-            gitId.setRepoUri(uri);
-            // Get last part of the URI as a repo name
-            gitId.setRepoName(uri.substring(uri.lastIndexOf('/') + 1).replaceAll(".git$", ""));
-        } else {
-            log.warning("No remotes configure for the repo " + repository.getDirectory() + " . Can't read remote url");
+        // Attempt to figure our url to repository assuming that repository isn't bare. Otherwise this info
+        // have to come from external source of info and appended to returned object
+        if (! repository.isBare() ) {
+            if ( ! remotes.isEmpty() ) {
+                // pick the first remote - in 99% of cases there will be only one anyway.
+                final String uri = storedConfig.getString("remote", remotes.iterator().next(), "url");
+                gitId.setRepoUri(uri);
+                // Get last part of the URI as a repo name
+                gitId.setRepoName(uri.substring(uri.lastIndexOf('/') + 1).replaceAll(".git$", ""));
+            } else {
+                log.warning("No remotes configure for the repo " + repository.getDirectory() + " . Can't read remote url");
+            }
         }
         return gitId.build();
     }
