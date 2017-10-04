@@ -19,6 +19,7 @@ message Meta {
         EiffelArtifactPublishedEvent = 5;
         EiffelConfidenceLevelModifiedEvent = 6;
         EiffelActivityFinishedEvent = 7;
+        EiffelArtifactReusedEvent = 8;
     }
 }
 
@@ -31,6 +32,7 @@ message Link {
         COMPOSITION = 4;
         ARTIFACT = 5;
         BASE = 6;
+        REUSED_ARTIFACT = 7;
 
         // The rest of the link types will be added if needed
     }

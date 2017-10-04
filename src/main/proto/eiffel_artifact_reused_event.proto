@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package net.praqma.tracey.protocol.eiffel.events;
+
+import "models.proto";
+
+message EiffelArtifactReusedEvent {
+    models.Meta meta = 1;
+    repeated models.Link links = 2;
+}
